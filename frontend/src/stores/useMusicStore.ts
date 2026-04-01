@@ -131,7 +131,6 @@ export const useMusicStore = create<MusicStore>((set) => ({
             set({ isLoading: false });
         }
     },
-    },
 
     fetchFeaturedSongs: async () => {
         set({ isLoading: true, error: null });
