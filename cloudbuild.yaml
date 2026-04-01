@@ -13,21 +13,7 @@ steps:
 
     # Push backend image
     - name: "gcr.io/cloud-builders/docker"
-      args: ["push", "gcr.io/$PROJECT_ID/spotify-backend:$SHORT_SHA"]
-
-    # Deploy to Cloud Run with secrets
-    - name: "gcr.io/cloud-builders/run"
-      args:
-          - deploy
-          - spotify-backend
-          - --image=gcr.io/$PROJECT_ID/spotify-backend:$SHORT_SHA
-          - --region=us-central1
-          - --platform=managed
-          - --allow-unauthenticated
-          - --memory=512Mi
-          - --cpu=1
-          - --update-secrets=MONGODB_URI=mongodb-uri:latest,CLERK_SECRET_KEY=clerk-secret-key:latest,CLOUDINARY_CLOUD_NAME=cloudinary-cloud-name:latest,CLOUDINARY_API_KEY=cloudinary-api-key:latest,CLOUDINARY_API_SECRET=cloudinary-api-secret:latest,FRONTEND_URL=frontend-url:latest
-          - --set-env-vars=NODE_ENV=production
+      args: ["push", "gcr.io/$PROJECT_ID/spotify-backend"]
 
 images:
     - "gcr.io/$PROJECT_ID/spotify-backend:$SHORT_SHA"
