@@ -1,0 +1,33 @@
+#!/bin/sh
+# Use the PORT environment variable, default to 8080
+PORT=${PORT:-8080}
+
+# Create nginx config with the correct PORT
+cat > /etc/nginx/conf.d/default.conf <<EOF
+server {
+    listen $PORT;
+    server_name _;
+
+    location / {
+        root /usr/share/nginx/html;
+        try_files \$uri \$uri/ /index.html;
+    }
+
+    # Disable caching for service worker
+    location /index.html {
+        root /usr/share/nginx/html;
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    # Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        root /usr/share/nginx/html;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+EOF
+
+# Start nginx
+nginx -g "daemon off;"
