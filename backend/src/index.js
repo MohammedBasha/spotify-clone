@@ -31,7 +31,7 @@ app.use(
     cors({
         origin: "http://localhost:3000",
         credentials: true,
-    })
+    }),
 );
 
 app.use(express.json()); // to parse req.body
@@ -44,7 +44,7 @@ app.use(
         limits: {
             fileSize: 10 * 1024 * 1024, // 10MB  max file size
         },
-    })
+    }),
 );
 
 // cron jobs
@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
     app.get("*", (req, res) => {
         res.sendFile(
-            path.resolve(__dirname, "../frontend", "dist", "index.html")
+            path.resolve(__dirname, "../frontend", "dist", "index.html"),
         );
     });
 }
