@@ -6,3 +6,5 @@ export const axiosInstance = axios.create({
             ? "http://localhost:8080/api"
             : "/api",
 });
+
+export default axiosInstance;
