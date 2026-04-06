@@ -1,6 +1,7 @@
 import { Song } from "../models/song.model.js";
 import { Album } from "../models/album.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import { seedSongsData, seedAlbumsData, albumSongMappings } from "../seeds/seedData.js";
 
 // helper function for cloudinary uploads
 const uploadToCloudinary = async (file) => {
@@ -111,4 +112,107 @@ export const deleteAlbum = async (req, res, next) => {
 
 export const checkAdmin = async (req, res, next) => {
 	res.status(200).json({ admin: true });
+};
+
+// Seed endpoints
+export const seedSongs = async (req, res, next) => {
+	try {
+		// Clear existing songs
+		await Song.deleteMany({});
+		
+		// Insert seed songs
+		const createdSongs = await Song.insertMany(seedSongsData);
+		
+		res.status(201).json({
+			message: "Songs seeded successfully",
+			count: createdSongs.length,
+			songs: createdSongs,
+		});
+	} catch (error) {
+		console.log("Error in seedSongs", error);
+		next(error);
+	}
+};
+
+export const seedAlbums = async (req, res, next) => {
+	try {
+		// Clear existing albums
+		await Album.deleteMany({});
+		
+		// Get all songs to link to albums
+		const allSongs = await Song.find({});
+		
+		if (allSongs.length === 0) {
+			return res.status(400).json({ message: "No songs found. Please seed songs first." });
+		}
+		
+		// Create albums with song references
+		const albumsToCreate = seedAlbumsData.map((album, index) => ({
+			...album,
+			songs: albumSongMappings[index]
+				.map((songIndex) => allSongs[songIndex]?._id)
+				.filter((id) => id),
+		}));
+		
+		const createdAlbums = await Album.insertMany(albumsToCreate);
+		
+		// Update songs with their album references
+		for (let i = 0; i < createdAlbums.length; i++) {
+			const album = createdAlbums[i];
+			const albumSongs = albumsToCreate[i].songs;
+			
+			await Song.updateMany({ _id: { $in: albumSongs } }, { albumId: album._id });
+		}
+		
+		res.status(201).json({
+			message: "Albums seeded successfully",
+			count: createdAlbums.length,
+			albums: createdAlbums,
+		});
+	} catch (error) {
+		console.log("Error in seedAlbums", error);
+		next(error);
+	}
+};
+
+export const seedDatabase = async (req, res, next) => {
+	try {
+		// Clear existing data
+		await Album.deleteMany({});
+		await Song.deleteMany({});
+		
+		// Create songs
+		const createdSongs = await Song.insertMany(seedSongsData);
+		
+		// Create albums with song references
+		const albumsToCreate = seedAlbumsData.map((album, index) => ({
+			...album,
+			songs: albumSongMappings[index]
+				.map((songIndex) => createdSongs[songIndex]?._id)
+				.filter((id) => id),
+		}));
+		
+		const createdAlbums = await Album.insertMany(albumsToCreate);
+		
+		// Update songs with their album references
+		for (let i = 0; i < createdAlbums.length; i++) {
+			const album = createdAlbums[i];
+			const albumSongs = albumsToCreate[i].songs;
+			
+			await Song.updateMany({ _id: { $in: albumSongs } }, { albumId: album._id });
+		}
+		
+		res.status(201).json({
+			message: "Database seeded successfully",
+			stats: {
+				songsCount: createdSongs.length,
+				albumsCount: createdAlbums.length,
+			},
+			albums: createdAlbums,
+			songs: createdSongs,
+		});
+	} catch (error) {
+		console.log("Error in seedDatabase", error);
+		next(error);
+	}
 };
