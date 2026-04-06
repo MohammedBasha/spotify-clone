@@ -13,6 +13,11 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+
+# Create .env.production file with build variables
+RUN echo "VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}" > .env.production && \
+    echo "VITE_BACKEND_URL=${VITE_BACKEND_URL}" >> .env.production
+
 RUN npm run build
 
 # Production stage
