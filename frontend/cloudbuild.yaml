@@ -1,16 +1,16 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/spotify-frontend'
-      - '--build-arg=VITE_CLERK_PUBLISHABLE_KEY=${_VITE_CLERK_PUBLISHABLE_KEY}'
-      - '--build-arg=VITE_BACKEND_URL=${_VITE_BACKEND_URL}'
-      - '.'
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          - "build"
+          - "-t"
+          - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/spotify-frontend"
+          - "--build-arg=VITE_CLERK_PUBLISHABLE_KEY=${_VITE_CLERK_PUBLISHABLE_KEY}"
+          - "--build-arg=VITE_BACKEND_URL=${_VITE_BACKEND_URL}"
+          - "."
 
 images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/spotify-frontend'
+    - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/spotify-frontend"
 
 substitutions:
-  _VITE_CLERK_PUBLISHABLE_KEY: 'pk_test_bright-platypus-70.clerk.accounts.dev'
-  _VITE_BACKEND_URL: 'https://spotify-backend-757684232443.us-central1.run.app'
+    _VITE_CLERK_PUBLISHABLE_KEY: "pk_test_YnJpZ2h0LXBsYXR5cHVzLTcwLmNsZXJrLmFjY291bnRzLmRldiQ"
+    _VITE_BACKEND_URL: "https://spotify-backend-757684232443.us-central1.run.app"
