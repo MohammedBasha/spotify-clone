@@ -4,7 +4,16 @@ import { Message } from "../models/message.model.js";
 export const initializeSocket = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: (origin, callback) => {
+                // Allow requests with no origin (polling, WebSocket without origin)
+                if (!origin) return callback(null, true);
+                
+                // Allow localhost for development
+                if (origin.includes("localhost")) return callback(null, true);
+                
+                // Allow any origin for production (nginx proxy case)
+                callback(null, true);
+            },
             credentials: true,
         },
     });

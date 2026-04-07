@@ -27,9 +27,27 @@ const PORT = process.env.PORT;
 const httpServer = createServer(app);
 initializeSocket(httpServer);
 
+// CORS configuration - Accept from localhost (dev) and via proxy from any frontend
+const corsOrigins = ["http://localhost:5173", "http://localhost:3000"];
+if (process.env.FRONTEND_URL) {
+    corsOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: (origin, callback) => {
+            // Allow requests with no origin (mobile apps, curl requests, socket.io)
+            if (!origin) return callback(null, true);
+            
+            // Allow localhost for development
+            if (origin.includes("localhost")) return callback(null, true);
+            
+            // Allow if in whitelist
+            if (corsOrigins.includes(origin)) return callback(null, true);
+            
+            // For production, also allow same domain (nginx proxy case)
+            callback(null, true);
+        },
         credentials: true,
     }),
 );
