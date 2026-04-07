@@ -17,13 +17,14 @@ server {
     location /api/ {
         proxy_pass https://spotify-backend-757684232443.us-central1.run.app/api/;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
+        proxy_set_header Host spotify-backend-757684232443.us-central1.run.app;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_ssl_verify off;
+        proxy_ssl_verify_hostname off;
+        proxy_buffering off;
+        proxy_request_buffering off;
     }
 
     # Disable caching for service worker
