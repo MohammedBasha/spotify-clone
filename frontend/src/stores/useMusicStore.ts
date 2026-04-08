@@ -83,10 +83,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get("/songs");
-            set({ songs: Array.isArray(response.data) ? response.data : [] });
+            set({ songs: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch songs";
-            set({ error: errorMsg, songs: [] });
+            set({ error: error.message });
         } finally {
             set({ isLoading: false });
         }
@@ -96,10 +95,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get("/stats");
-            set({ stats: response.data || { totalSongs: 0, totalAlbums: 0, totalUsers: 0, totalArtists: 0 } });
+            set({ stats: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch stats";
-            set({ error: errorMsg, stats: { totalSongs: 0, totalAlbums: 0, totalUsers: 0, totalArtists: 0 } });
+            set({ error: error.message });
         } finally {
             set({ isLoading: false });
         }
@@ -110,10 +108,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
 
         try {
             const response = await axiosInstance.get("/albums");
-            set({ albums: Array.isArray(response.data) ? response.data : [] });
+            set({ albums: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch albums";
-            set({ error: errorMsg, albums: [] });
+            set({ error: error.response.data.message });
         } finally {
             set({ isLoading: false });
         }
@@ -125,8 +122,7 @@ export const useMusicStore = create<MusicStore>((set) => ({
             const response = await axiosInstance.get(`/albums/${id}`);
             set({ currentAlbum: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch album";
-            set({ error: errorMsg, currentAlbum: null });
+            set({ error: error.response.data.message });
         } finally {
             set({ isLoading: false });
         }
@@ -136,10 +132,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get("/songs/featured");
-            set({ featuredSongs: Array.isArray(response.data) ? response.data : [] });
+            set({ featuredSongs: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch featured songs";
-            set({ error: errorMsg, featuredSongs: [] });
+            set({ error: error.response.data.message });
         } finally {
             set({ isLoading: false });
         }
@@ -149,10 +144,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get("/songs/made-for-you");
-            set({ madeForYouSongs: Array.isArray(response.data) ? response.data : [] });
+            set({ madeForYouSongs: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch made for you songs";
-            set({ error: errorMsg, madeForYouSongs: [] });
+            set({ error: error.response.data.message });
         } finally {
             set({ isLoading: false });
         }
@@ -162,10 +156,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get("/songs/trending");
-            set({ trendingSongs: Array.isArray(response.data) ? response.data : [] });
+            set({ trendingSongs: response.data });
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || "Failed to fetch trending songs";
-            set({ error: errorMsg, trendingSongs: [] });
+            set({ error: error.response.data.message });
         } finally {
             set({ isLoading: false });
         }

@@ -11,16 +11,6 @@ type SectionGridProps = {
 const SectionGrid = ({ songs, title, isLoading }: SectionGridProps) => {
     if (isLoading) return <SectionGridSkeleton />;
 
-    // Ensure songs is always an array and has items
-    if (!songs || !Array.isArray(songs) || songs.length === 0) {
-        return (
-            <div className="mb-8">
-                <h2 className="text-xl sm:text-2xl font-bold mb-4">{title}</h2>
-                <p className="text-zinc-400">No songs available</p>
-            </div>
-        );
-    }
-
     return (
         <div className="mb-8">
             <div className="flex items-center justify-between mb-4">

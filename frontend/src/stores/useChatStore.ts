@@ -20,14 +20,14 @@ interface ChatStore {
     sendMessage: (
         receiverId: string,
         senderId: string,
-        content: string,
+        content: string
     ) => void;
     fetchMessages: (userId: string) => Promise<void>;
     setSelectedUser: (user: User | null) => void;
 }
 
 const baseURL =
-    import.meta.env.MODE === "development" ? "http://localhost:8080" : "/";
+    import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
 
 const socket = io(baseURL, {
     autoConnect: false, // only connect if user is authenticated
@@ -130,7 +130,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await axiosInstance.get(
-                `/users/messages/${userId}`,
+                `/users/messages/${userId}`
             );
             set({ messages: response.data });
         } catch (error: any) {
