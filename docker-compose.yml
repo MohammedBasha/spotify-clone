@@ -1,28 +1,14 @@
-version: "3.9"
-
 services:
-  backend:
-    image: mohammedbasha/spotify-backend
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env
-    depends_on:
-      - mongo
+    backend:
+        image: mohammedbasha/spotify-backend
+        ports:
+            - "5000:5000"
+        env_file:
+            - backend/.env
 
-  frontend:
-    image: mohammedbasha/spotify-frontend
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-
-  mongo:
-    image: mongo:7
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  mongo_data:
+    frontend:
+        image: mohammedbasha/spotify-frontend
+        ports:
+            - "3000:80"
+        depends_on:
+            - backend
