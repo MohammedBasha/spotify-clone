@@ -2,6 +2,9 @@
 
 ## A responsive super detailed & featured Spotify clone with real-time chat application
 
+🌍 **Live Demo (Deployed on GCP - Cloud Run):**  
+[Spotify Clone](https://spotify-frontend-757684232443.us-central1.run.app/)
+
 ### 📦 Docker Setup
 
 Full Docker instructions are available here:
